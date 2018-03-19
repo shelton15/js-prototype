@@ -317,7 +317,9 @@
   var basket = {
     init: function() {
       $('.basket_add').on('submit', function(e) {
-        basket.productAdd($(this));
+        e.preventDefault();
+        console.log($(this).serializeArray());
+        basket.productAdd($(this), $(this).serializeArray());
         return false;
       });
       
@@ -445,8 +447,39 @@
           $('.drawer_item').removeClass(hidden);
       }
     },
-    productAdd: function(el) {
+    productAdd: function(el, data) {
       var $this = $(el);
+      console.log(data); // array
+
+        var returnArray = {};
+        for (var i = 0; i < data.length; i++){
+          returnArray[data[i]['name']] = data[i]['value'];
+        }
+        console.log(returnArray);
+
+
+      //      $.cookie('basket-data', data);
+//      console.log($.cookie('basket-data'));
+//      const dataJSON = JSON.stringify(data);
+      console.log($.cookie());
+
+      if ($.cookie('basket-data')) {
+        let cookieData = $.cookie('basket-data');
+        console.log(cookieData);
+        let cookieArray = JSON.parse(cookieData);
+        console.log(cookieArray);
+        cookieArray.push(returnArray);
+        $.cookie('basket-data',JSON.stringify(cookieArray));
+        console.log($.cookie());
+//        window.qtyVar = parseInt($.cookie('qty'));
+      } else {
+        let cookieArray = new Array(returnArray);
+        $.cookie('basket-data',JSON.stringify(cookieArray));
+        console.log($.cookie());
+      }
+
+
+//      let potted = new Live('potted','clay');
       
       if ($.cookie('qty'))
         window.qtyVar = parseInt($.cookie('qty'));
@@ -463,7 +496,7 @@
         window.totalVar = 0;
       
       window.totalVar = window.totalVar + (parseInt($this.find('input[name="qty"]').val()) * parseFloat($this.find('input[name="unitprice"]').val()));
-      basket.calculate(true);
+//      basket.calculate(true);
     }
   };
 

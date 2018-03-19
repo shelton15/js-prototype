@@ -122,7 +122,8 @@
 						<li>6 of each</li>
 					</ul>
 					
-					<form action="basket.html" method="get" class="basket_add">
+					<!-- <form action="basket.html" method="get" class="basket_add"> -->
+          <form method="get" class="basket_add">
 						<input type="hidden" name="miniBasket" value="true" />
 						<input type="hidden" name="total" value="29.95" />
 						<input type="hidden" name="shipping" value="11.95" />
@@ -132,8 +133,8 @@
 							<legend class="h3 shadow">Select a Vase:</legend>
 							<div class="rc">
 								<ul>
-									<li><input type="checkbox" name="vase-type" id="vase-type-round" value="round" /> <label for="vase-type-round">Round clear glass</label></li>
-									<li><input type="checkbox" name="vase-type" id="vase-type-square" value="square" /> <label for="vase-type-square">Square clear glass</label></li>
+									<li><input type="radio" name="vase-type" id="vase-type-round" value="round" checked /> <label for="vase-type-round">Round clear glass</label></li>
+									<li><input type="radio" name="vase-type" id="vase-type-square" value="square" /> <label for="vase-type-square">Square clear glass</label></li>
 								</ul>
 							</div>
 							<div class="cols no_margin_b">
