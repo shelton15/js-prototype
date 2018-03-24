@@ -24,7 +24,7 @@
 			<h3 class="hidden">Quick Links</h3>
 			<ul id="quick_links" class="reset menu">
 				<li><a href="#">My Account</a></li>
-				<li><a href="basket.html">Basket (<span id="mini_qty">0</span>)</a></li>
+				<li><a href="#">Basket (<span id="mini_qty">0</span>)</a></li>
 				<li><a href="#">Search</a></li>
 				<li><a href="#">Order Status</a></li>
 				<li><a href="#">Customer Service</a></li>
@@ -36,7 +36,7 @@
 		<h3 class="hidden">Main Navigation</h3>
 		<ul>
 			<li>
-				<a href="category-arrangements.html" class="parent"><span>Arrangements</span></a>
+				<a href="/pages/product-detail-arrangements.html" class="parent"><span>Arrangements</span></a>
 				<div>
 					<ul>
 						<li>
@@ -71,13 +71,13 @@
 							</ul>
 						</li>
 						<li>
-							<a href="sub-category-mixed-arrangements.html">Mixed Arrangements</a>
+							<a href="#">Mixed Arrangements</a>
 							<ul>
 								<li><a href="#">Spring Pastels</a></li>
 								<li><a href="#">Autumn Warmth</a></li>
 								<li><a href="#">Red, White, &amp; Blue</a></li>
 								<li><a href="#">All White</a></li>
-								<li><a href="product-detail-arrangements.html">Mixed Roses</a></li>
+								<li><a href="/pages/product-detail-arrangements.html">Mixed Roses</a></li>
 								<li><a href="#">Mixed Irises</a></li>
 								<li><a href="#">Daisies &amp; More Daisies</a></li>
 							</ul>
@@ -85,8 +85,8 @@
 					</ul>
 				</div>
 			</li>
-			<li><a href="#"><span>Live Plants</span></a></li>
-			<li class="current"><a href="build-a-bouquet.html"><span>Build-a-Bouquet</span></a></li>
+			<li><a href="/pages/product-detail-live.html"><span>Live Plants</span></a></li>
+			<li class="current"><a href="/pages/build-a-bouquet.html"><span>Build-a-Bouquet</span></a></li>
 			<li><a href="#"><span>Special Events</span></a></li>
 			<li>
 				<a href="#" class="parent"><span>Care Tips</span></a>
@@ -96,12 +96,12 @@
 						<li><a href="#">Caring for Roses</a></li>
 						<li><a href="#">Caring for Tropical Flowers</a></li>
 						<li><a href="#">Caring for House Plants</a></li>
-						<li><a href="care-tips-orchids.html">Caring for Orchids</a></li>
+						<li><a href="#">Caring for Orchids</a></li>
 					</ul>
 				</div>
 			</li>
 			<li><a href="#"><span>Eco-Conscious</span></a></li>
-			<li><a href="our-designers.html"><span>Our Designers</span></a></li>
+			<li><a href="#"><span>Our Designers</span></a></li>
 		</ul>
 	</div>
 	
@@ -132,9 +132,12 @@
 				<img src="/assets/images/70_daisy_white_159207232.jpg" width="69" height="69" alt="Daisies" />
 			</div>
 		
-			<form action="build-a-bouquet2.html" method="get" id="bab_form">
-				<input type="hidden" name="unitprice" value="60.00" />
-				<input type="hidden" name="shipping" value="0" />
+			<!-- <form action="build-a-bouquet2.html" method="get" id="bab_form"> -->
+			<form method="get" class="basket_add">
+        <input type="hidden" name="unitprice" value="60.00" />
+        <input type="hidden" name="shipping" value="0" />
+        <input type="hidden" name="category" value="bouquet" />
+        <input type="hidden" name="itemname" value="Bouquet" />
 				
 				<fieldset class="bab_item" id="bab-CL" data-legend="Calla Lilies">
 					<legend class="hidden">Calla Lilies</legend>
@@ -289,10 +292,19 @@
 						<label class="hidden" for="qtyD">Qty</label>
 						<input type="number" value="0" name="qtyD" id="qtyD" class="text spinner" />
 					</div>
-				</fieldset>
+        </fieldset>
+        
+        <legend class="h3 shadow lg_margin_top">Select a Vase:</legend>
+        <div class="rc">
+          <ul>
+            <li><input type="radio" name="vasetype" id="vase-type-round" value="round" checked /> <label for="vase-type-round">Round clear glass</label></li>
+            <li><input type="radio" name="vasetype" id="vase-type-square" value="square" /> <label for="vase-type-square">Square clear glass</label></li>
+          </ul>
+        </div>
 				
 				<div id="totals" class="lg_margin_top std_margin clearfix">
-					<input type="submit" class="btn checkout" value="Next" />
+          <input type="hidden" name="qty" value="1" />
+					<input type="submit" class="btn checkout" value="Add to cart" />
 				</div>
 			</form>
 			
@@ -318,13 +330,13 @@
 				<li>
 					<h4 class="hidden">Our Flowers</h4>
 					<ul>
-						<li><a href="category-arrangements.html">Arrangements</a></li>
+						<li><a href="/pages/category-arrangements.html">Arrangements</a></li>
 						<li><a href="#">Live Plants</a></li>
-						<li><a href="build-a-bouquet.html">Build-a-Bouquet</a></li>
+						<li><a href="/pages/build-a-bouquet.html">Build-a-Bouquet</a></li>
 						<li><a href="#">Special Events</a></li>
 						<li><a href="#">Care Tips</a></li>
 						<li><a href="#">Eco-Conscious</a></li>
-						<li><a href="our-designers.html">Our Designers</a></li>
+						<li><a href="#">Our Designers</a></li>
 					</ul>
 				</li>
 			</ul>

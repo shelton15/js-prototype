@@ -318,15 +318,14 @@
     init: function() {
       $('.basket_add').on('submit', function(e) {
         e.preventDefault();
-        console.log($(this).serializeArray());
         basket.productAdd($(this), $(this).serializeArray());
         return false;
       });
       
       if (!$.cookie('basket') && !izilla_gup.miniBasket)
         $('#basket_empty').removeClass(hidden);
-      else
-        basket.calculate();
+     else
+       basket.calculate();
       
       if (izilla_gup.clearBasket) {
         $.removeCookie('basket');
@@ -449,37 +448,55 @@
     },
     productAdd: function(el, data) {
       var $this = $(el);
-      console.log(data); // array
+      var dataObject = {};
+      let newItem;
 
-        var returnArray = {};
-        for (var i = 0; i < data.length; i++){
-          returnArray[data[i]['name']] = data[i]['value'];
+      for (let i = 0; i < data.length; i++){
+        dataObject[data[i]['name']] = data[i]['value'];
+      }
+
+      if (dataObject.category === 'arrangement') {
+        newItem = new Arrangement(dataObject.itemname, dataObject.vasetype, dataObject.qty);
+      } else if (dataObject.category === 'live') {
+        newItem = new Live(dataObject.itemname, dataObject.pottype, dataObject.qty);
+      } else if (dataObject.category === 'bouquet') {
+        if ($.cookie('bouquetCount')) {
+          $.cookie('bouquetCount', parseInt($.cookie('bouquetCount')) + 1);
+        } else {
+          $.cookie('bouquetCount', 1)
         }
-        console.log(returnArray);
 
-
-      //      $.cookie('basket-data', data);
-//      console.log($.cookie('basket-data'));
-//      const dataJSON = JSON.stringify(data);
-      console.log($.cookie());
+        newItem = new Bouquet('Bouquet' + $.cookie('bouquetCount'), dataObject.vasetype);
+        for (item in dataObject) {
+          // if item starts with 'qty' and has a value greater than 0
+          if(RegExp('qty.+').test(item) && dataObject[item] > 0) {
+            const stemType = item.substr(3);
+            const legend = $('#'+item).parent().parent().data('legend');
+            const key = legend.replace(/\s/g, '');
+            // if item requires a color selection and one has been specified
+            if (['CL','GD','R','L','T'].includes(stemType) &&
+            dataObject['color' + stemType] !== '---') {
+              // add new item, specifying name, quantity, and color
+              newItem.flowers.addStem(key, dataObject[item], dataObject['color' + stemType]);
+            } else {
+              // add new item specifying only name and quantity
+              newItem.flowers.addStem(key, dataObject[item]);
+            }
+          }
+        }
+        newItem.logItem();
+      }
 
       if ($.cookie('basket-data')) {
         let cookieData = $.cookie('basket-data');
-        console.log(cookieData);
         let cookieArray = JSON.parse(cookieData);
-        console.log(cookieArray);
-        cookieArray.push(returnArray);
-        $.cookie('basket-data',JSON.stringify(cookieArray));
-        console.log($.cookie());
-//        window.qtyVar = parseInt($.cookie('qty'));
+        cookieArray.push(newItem);
+        $.cookie('basket-data', JSON.stringify(cookieArray));
       } else {
-        let cookieArray = new Array(returnArray);
-        $.cookie('basket-data',JSON.stringify(cookieArray));
-        console.log($.cookie());
+        let cookieArray = new Array(newItem);
+        $.cookie('basket-data', JSON.stringify(cookieArray));
       }
-
-
-//      let potted = new Live('potted','clay');
+      console.log(JSON.parse($.cookie('basket-data')));
       
       if ($.cookie('qty'))
         window.qtyVar = parseInt($.cookie('qty'));
@@ -496,7 +513,7 @@
         window.totalVar = 0;
       
       window.totalVar = window.totalVar + (parseInt($this.find('input[name="qty"]').val()) * parseFloat($this.find('input[name="unitprice"]').val()));
-//      basket.calculate(true);
+      basket.calculate(true);
     }
   };
 
@@ -591,11 +608,8 @@
   }
 
   // Based on Item
-  function Flower(name, quantity, color) {
-    this.name = name;
+  function Flower(quantity, color) {
     this[color] = quantity;
-    // this.quantity = quantity;
-    // this.color = color;
   }
   Flower.prototype = new Item(); // inheritance -- creating chain
 
@@ -623,55 +637,14 @@
   Arrangement.prototype = new Cut();
 
   // Based on Cut
-  function CYO(name, vase) {
+  function Bouquet(name, vase) {
     this.name = name;
     this.vase = vase;
     this.flowers = {
       addStem: function(name, quantity = 1, color = 'default') {
-        // if the flower doesn't exist, then create it
-        if (typeof this[name] === 'undefined' || this[name] === null) {
-          this[name] = new Flower(name, quantity, color);
-        // if the flower exists, but doesn't have a quantity for the specified 
-        // color, then add it
-        } else if (typeof this[name][color] === 'undefined' || this[name].color === null) {
-          this[name][color] = quantity;
-        // otherwise, add the specified number to the quantity value for the 
-        // specified color
-        } else {
-          this[name][color] += quantity;
-        }
+        this[name] = new Flower(quantity, color);
       }
     }
   }
-  CYO.prototype = new Cut();
-
-
-
-  // let Cart = {
-  //   addToCart: function(name) {
-  //     if (typeof this[name] === 'undefined' || this[name] === null) {
-  //       this[name] = new Item(name);
-  //       console.log('created');
-  //     } else {
-  //       this[name].quantity += 1;
-  //       console.log('added');
-  //     }
-  //   },
-
-  // }
-
-  let potted = new Live('potted','clay');
-  potted.logItem();
-  let arr = new Arrangement('arr','clear');
-  arr.logItem();
-  let bouquet = new CYO('bouquet','square');
-  bouquet.logItem();
-  bouquet.flowers.addStem('lavender', 5);
-  bouquet.flowers.lavender.logItem();
-  bouquet.flowers.addStem('daisy');
-  bouquet.flowers.addStem('daisy', 1, 'white');
-  bouquet.flowers.addStem('daisy', 2, 'yellow');
-  bouquet.flowers.daisy.logItem();
-  bouquet.logItem();
-
+  Bouquet.prototype = new Cut();
 })();

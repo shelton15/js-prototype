@@ -32,11 +32,11 @@ var accordion = {
 var bab = {
 	init: function() {
 		var query = window.location.search.substring(1),
-			params = query.split('&');
+        params = query.split('&');
 		
 		for (var i in params) { 
 			var keyValue = params[i].split('=');
-			document.getElementsByName(keyValue[0])[0].value = keyValue[1];
+      keyValue[0].value = keyValue[1];
 		}
 		
 		var totalFlowers = 0,
