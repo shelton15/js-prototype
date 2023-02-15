@@ -48,7 +48,7 @@ var bab = {
 		});
 		
 		$totalFlowers.html(totalFlowers);
-		$('#total_cost').html('$' + Number(parseFloat($('input[name="unitprice"]')[0].value)).toFixed(2));
+		// $('#total_cost').html('$' + Number(parseFloat($('input[name="unitprice"]')[0].value)).toFixed(2));
 	}
 };
 

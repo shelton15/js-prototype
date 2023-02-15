@@ -454,11 +454,12 @@
       for (let i = 0; i < data.length; i++){
         dataObject[data[i]['name']] = data[i]['value'];
       }
+      console.log(dataObject);
 
       if (dataObject.category === 'arrangement') {
-        newItem = new Arrangement(dataObject.itemname, dataObject.vasetype, dataObject.qty);
+
       } else if (dataObject.category === 'live') {
-        newItem = new Live(dataObject.itemname, dataObject.pottype, dataObject.qty);
+
       } else if (dataObject.category === 'bouquet') {
         if ($.cookie('bouquetCount')) {
           $.cookie('bouquetCount', parseInt($.cookie('bouquetCount')) + 1);
@@ -466,7 +467,6 @@
           $.cookie('bouquetCount', 1)
         }
 
-        newItem = new Bouquet('Bouquet' + $.cookie('bouquetCount'), dataObject.vasetype);
         for (item in dataObject) {
           // if item starts with 'qty' and has a value greater than 0
           if(RegExp('qty.+').test(item) && dataObject[item] > 0) {
@@ -477,15 +477,16 @@
             if (['CL','GD','R','L','T'].includes(stemType) &&
             dataObject['color' + stemType] !== '---') {
               // add new item, specifying name, quantity, and color
-              newItem.flowers.addStem(key, dataObject[item], dataObject['color' + stemType]);
+              let stemName = dataObject['color' + stemType];
+
             } else {
               // add new item specifying only name and quantity
-              newItem.flowers.addStem(key, dataObject[item]);
+
             }
           }
         }
-        newItem.logItem();
       }
+
 
       if ($.cookie('basket-data')) {
         let cookieData = $.cookie('basket-data');
@@ -595,56 +596,4 @@
       });
     }
   };
-
-  // Top-level prototype
-  function Item() {
-  }
-  Item.prototype.type = 'floral'; // not balloons or other types of items
-  Item.prototype.logItem = function() {
-    console.log('%c' + this.name,'font-weight: bold');
-    for (let prop in this) {
-      console.log(' ', prop, ': ', this[prop])
-    }
-  }
-
-  // Based on Item
-  function Flower(quantity, color) {
-    this[color] = quantity;
-  }
-  Flower.prototype = new Item(); // inheritance -- creating chain
-
-  // Based on Item
-  function Live(name, pot, quantity = 1) {
-    this.name = name;
-    this.pot = pot;
-    this.quantity = quantity;
-  }
-  Live.prototype = new Item();
-  Live.prototype.storage = 'warm';
-
-  // Based on Item
-  function Cut() {
-  }
-  Cut.prototype = new Item();
-  Cut.prototype.storage = 'cool';
-
-  // Based on Cut
-  function Arrangement(name, vase, quantity = 1) {
-    this.name = name;
-    this.vase = vase;
-    this.quantity = quantity;
-  }
-  Arrangement.prototype = new Cut();
-
-  // Based on Cut
-  function Bouquet(name, vase) {
-    this.name = name;
-    this.vase = vase;
-    this.flowers = {
-      addStem: function(name, quantity = 1, color = 'default') {
-        this[name] = new Flower(quantity, color);
-      }
-    }
-  }
-  Bouquet.prototype = new Cut();
 })();
